@@ -1,9 +1,12 @@
 const ctx = document.getElementById('myChart');
+
+//Array per le labels assi X e Y
 const asseX = [];
 const asseY = [];
 
 let chartObj;
 
+// Modello chart
 let chart = {
     type: 'line',
     data: {
@@ -64,8 +67,10 @@ let chart = {
     }
 }
 
+//Richiamo funzione per creare grafico al caricamento della pagina
 chartIt();
 
+//Funzione asincrona per richiamare weather(), recuperare gli assi X, Y e creare l'oggetto chart su DOM
 async function chartIt() {
     await weather().catch(error => {
         console.log('errorino!');
@@ -74,7 +79,8 @@ async function chartIt() {
     chartObj = new Chart(ctx, chart);
 }
 
-
+//Funzione asincrona per agire sui dati NASA e recuperare i miei assi X e Y del grafico
+//Verifica 'MeanTmp.csv' per modello del .csv
 async function weather() {
     const response = await fetch('MeanTmp.csv');
     const data = await response.text();
@@ -88,11 +94,14 @@ async function weather() {
     })
 }
 
+//Bottone per mostrare grafico a barre
 document.querySelector('#bar').addEventListener('click', () => {
-    chartObj.resetZoom();
-    chartObj.destroy();
-    chart.type = 'bar';
-    chartObj = new Chart(ctx, chart);
+    chartObj.resetZoom(); //resetto zoom
+    chartObj.destroy(); //distruggo l'istanza precedente
+    chart.type = 'bar'; //cambio il tipo di parametro
+    chartObj = new Chart(ctx, chart); //creo il nuovo chart su DOM con il nuovo tipo
+
+    //Controlli per lo stile del bottone
     if (document.querySelector('#bar').classList.contains('btn-outline-danger')) {
         document.querySelector('#bar').classList.remove('btn-outline-danger');
         document.querySelector('#bar').classList.add('btn-danger');
@@ -101,6 +110,7 @@ document.querySelector('#bar').addEventListener('click', () => {
     }
 });
 
+//Bottone per mostrare grafico linea iniziale
 document.querySelector('#line').addEventListener('click', () => {
     chartObj.resetZoom();
     chartObj.destroy();
@@ -114,6 +124,7 @@ document.querySelector('#line').addEventListener('click', () => {
     }
 });
 
+//Bottone per il reset zoom
 function onResetZoom() {
     chartObj.resetZoom();
 }
